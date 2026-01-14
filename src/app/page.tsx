@@ -1,65 +1,84 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { FeaturedCars } from '@/components/car/FeaturedCars';
+import { Button } from '@/components/ui/Button';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <Header />
+      <main className="container mx-auto px-4 py-12">
+        {/* Hero Section */}
+        <section className="text-center mb-16 px-2">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-[var(--color-gold)] leading-tight py-4">
+            Welcome to BA12 Automotive
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-xl md:text-2xl mb-8 text-[var(--color-gold)] opacity-80 px-2">
+            Quality used cars in excellent condition
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <Link href="/showroom">
+            <Button variant="primary" className="text-lg px-8 py-3">
+              Browse Our Showroom
+            </Button>
+          </Link>
+        </section>
+
+        {/* Featured Cars */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-center text-[var(--color-gold)]">
+            Featured Vehicles
+          </h2>
+          <FeaturedCars />
+          <div className="text-center mt-8">
+            <Link href="/showroom">
+              <Button>View All Vehicles</Button>
+            </Link>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="text-3xl font-bold mb-6 text-[var(--color-gold)]">
+            Your Trusted Car Dealer
+          </h2>
+          <p className="text-lg text-[var(--color-gold)] opacity-80 leading-relaxed">
+            At BA12 Automotive, we pride ourselves on offering premium quality used cars.
+            Each vehicle is carefully selected and inspected to ensure you get the best value
+            for your money. Browse our collection and find your perfect car today.
+          </p>
+        </section>
+
+        {/* Instagram Section */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-center text-[var(--color-gold)]">
+            Follow Us on Instagram
+          </h2>
+          <div className="flex justify-center">
+            <div className="w-full max-w-md">
+              <iframe
+                src="https://www.instagram.com/ba12_automotive/embed"
+                className="w-full h-[500px] border border-[var(--color-border)] rounded-lg bg-[var(--color-card-bg)]"
+                style={{ border: 0 }}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Contact CTA */}
+        <section className="text-center card max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4 text-[var(--color-gold)]">
+            Have Questions?
+          </h2>
+          <p className="text-[var(--color-gold)] opacity-80 mb-6">
+            Get in touch with us today. We're here to help you find the perfect vehicle.
+          </p>
+          <Link href="/contact">
+            <Button variant="primary">Contact Us</Button>
+          </Link>
+        </section>
       </main>
-    </div>
+      <Footer />
+    </>
   );
 }

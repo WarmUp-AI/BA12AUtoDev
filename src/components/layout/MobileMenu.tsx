@@ -31,7 +31,7 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black z-40 md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black z-[90] md:hidden transition-opacity duration-300 ${
           isOpen ? 'opacity-80' : 'opacity-0 pointer-events-none'
         }`}
         onClick={onClose}
@@ -39,7 +39,7 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
 
       {/* Menu */}
       <div
-        className={`fixed top-20 left-0 right-0 bg-[var(--color-card-bg)] border-b border-[var(--color-border)] z-50 md:hidden transform transition-all duration-300 ease-in-out ${
+        className={`fixed top-20 left-0 right-0 bg-[var(--color-card-bg)] border-b border-[var(--color-border)] z-[95] md:hidden transform transition-all duration-300 ease-in-out ${
           isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
         }`}
       >

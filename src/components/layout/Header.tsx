@@ -17,7 +17,7 @@ export function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--color-bg)] border-b border-[var(--color-border)]">
+    <header className="fixed top-0 left-0 right-0 z-[100] bg-[var(--color-bg)] border-b border-[var(--color-border)]">
       <nav className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -48,9 +48,14 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-[var(--color-gold)] text-2xl focus:outline-none"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setMobileMenuOpen(!mobileMenuOpen);
+            }}
+            className="md:hidden text-[var(--color-gold)] text-2xl focus:outline-none relative z-[60] p-2 -mr-2"
             aria-label="Toggle menu"
+            type="button"
           >
             {mobileMenuOpen ? '✕' : '☰'}
           </button>

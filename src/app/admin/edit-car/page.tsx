@@ -42,7 +42,7 @@ export default function EditCarListPage() {
           placeholder="Search by make, model, or title..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg text-[var(--color-gold)]"
+          className="w-full px-4 py-3 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg text-[var(--color-gold)] placeholder:text-[var(--color-gold)] placeholder:opacity-50 focus:outline-none focus:border-[var(--color-gold)]"
         />
       </div>
 
@@ -70,10 +70,10 @@ export default function EditCarListPage() {
                     <td className="py-3 px-4 text-[var(--color-gold)]">{car.price}</td>
                     <td className="py-3 px-4 text-[var(--color-gold)]">{car.year || 'N/A'}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded text-xs ${
+                      <span className={`px-2 py-1 rounded text-xs font-semibold ${
                         car.price.toUpperCase() === 'SOLD'
-                          ? 'bg-[var(--color-danger)] bg-opacity-20 text-[var(--color-danger)]'
-                          : 'bg-[var(--color-gold)] bg-opacity-20 text-[var(--color-gold)]'
+                          ? 'bg-[var(--color-danger)] text-white'
+                          : 'bg-[var(--color-gold)] text-black'
                       }`}>
                         {car.price.toUpperCase() === 'SOLD' ? 'Sold' : 'Available'}
                       </span>

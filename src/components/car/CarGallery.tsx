@@ -63,16 +63,24 @@ export function CarGallery({ images, title }: CarGalleryProps) {
         {images.length > 1 && (
           <>
             <button
-              onClick={handlePrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-[var(--color-gold)] w-12 h-12 rounded-full flex items-center justify-center transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePrevious();
+              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-[var(--color-gold)] w-12 h-12 rounded-full flex items-center justify-center transition-all z-10"
               aria-label="Previous image"
+              type="button"
             >
               ‹
             </button>
             <button
-              onClick={handleNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-[var(--color-gold)] w-12 h-12 rounded-full flex items-center justify-center transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleNext();
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-[var(--color-gold)] w-12 h-12 rounded-full flex items-center justify-center transition-all z-10"
               aria-label="Next image"
+              type="button"
             >
               ›
             </button>

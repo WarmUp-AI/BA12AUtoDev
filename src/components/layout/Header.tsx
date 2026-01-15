@@ -51,7 +51,6 @@ export function Header() {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              console.log('Burger clicked!'); // Debug log
               setMobileMenuOpen(!mobileMenuOpen);
             }}
             className="md:hidden md:relative absolute right-0 text-[var(--color-gold)] text-2xl focus:outline-none z-[110] p-3 touch-manipulation active:scale-95 bg-[var(--color-bg)]"

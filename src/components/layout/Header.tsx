@@ -32,8 +32,8 @@ export function Header() {
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex md:pointer-events-auto pointer-events-none items-center gap-8">
+          {/* Desktop Navigation - Completely hidden on mobile to prevent click interference */}
+          <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -44,7 +44,10 @@ export function Header() {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[var(--color-gold-hover)] transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
-          </div>
+          </nav>
+
+          {/* Spacer for mobile to maintain layout */}
+          <div className="flex-1 md:hidden" />
 
           {/* Mobile Menu Button */}
           <button

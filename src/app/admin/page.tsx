@@ -42,40 +42,40 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8 text-[var(--color-gold)]">Dashboard</h1>
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-[var(--color-gold)]">Dashboard</h1>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
         <div className="card">
           <div className="text-[var(--color-gold)] opacity-60 text-sm mb-2">Total Vehicles</div>
-          <div className="text-4xl font-bold text-[var(--color-gold)]">{stats.total}</div>
+          <div className="text-3xl md:text-4xl font-bold text-[var(--color-gold)]">{stats.total}</div>
         </div>
         <div className="card">
           <div className="text-[var(--color-gold)] opacity-60 text-sm mb-2">Available</div>
-          <div className="text-4xl font-bold text-[var(--color-gold)]">{stats.available}</div>
+          <div className="text-3xl md:text-4xl font-bold text-[var(--color-gold)]">{stats.available}</div>
         </div>
         <div className="card">
           <div className="text-[var(--color-gold)] opacity-60 text-sm mb-2">Sold</div>
-          <div className="text-4xl font-bold text-[var(--color-danger)]">{stats.sold}</div>
+          <div className="text-3xl md:text-4xl font-bold text-[var(--color-danger)]">{stats.sold}</div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="card mb-8">
-        <h2 className="text-2xl font-bold mb-6 text-[var(--color-gold)]">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="card mb-6 md:mb-8">
+        <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-[var(--color-gold)]">Quick Actions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
           <Link href="/admin/add-car">
-            <Button variant="primary" className="w-full">
+            <Button variant="primary" className="w-full text-sm md:text-base">
               ➕ Add New Car
             </Button>
           </Link>
           <Link href="/admin/edit-car">
-            <Button className="w-full">
+            <Button className="w-full text-sm md:text-base">
               ✏️ Edit Cars
             </Button>
           </Link>
           <Link href="/admin/analytics">
-            <Button className="w-full">
+            <Button className="w-full text-sm md:text-base">
               📈 View Analytics
             </Button>
           </Link>
@@ -84,9 +84,9 @@ export default function AdminDashboard() {
 
       {/* Recent Cars */}
       <div className="card">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-[var(--color-gold)]">Recent Cars</h2>
-          <Link href="/showroom" className="text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] text-sm">
+        <div className="flex justify-between items-center mb-4 md:mb-6">
+          <h2 className="text-xl md:text-2xl font-bold text-[var(--color-gold)]">Recent Cars</h2>
+          <Link href="/showroom" className="text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] text-xs md:text-sm whitespace-nowrap">
             View All →
           </Link>
         </div>
@@ -96,25 +96,25 @@ export default function AdminDashboard() {
             <div className="spinner"></div>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto -mx-4 md:mx-0">
+            <table className="w-full min-w-[600px]">
               <thead>
                 <tr className="border-b border-[var(--color-border)]">
-                  <th className="text-left py-3 px-4 text-[var(--color-gold)] opacity-80">Title</th>
-                  <th className="text-left py-3 px-4 text-[var(--color-gold)] opacity-80">Price</th>
-                  <th className="text-left py-3 px-4 text-[var(--color-gold)] opacity-80">Year</th>
-                  <th className="text-left py-3 px-4 text-[var(--color-gold)] opacity-80">Status</th>
-                  <th className="text-left py-3 px-4 text-[var(--color-gold)] opacity-80">Actions</th>
+                  <th className="text-left py-2 md:py-3 px-2 md:px-4 text-[var(--color-gold)] opacity-80 text-xs md:text-sm">Title</th>
+                  <th className="text-left py-2 md:py-3 px-2 md:px-4 text-[var(--color-gold)] opacity-80 text-xs md:text-sm">Price</th>
+                  <th className="text-left py-2 md:py-3 px-2 md:px-4 text-[var(--color-gold)] opacity-80 text-xs md:text-sm">Year</th>
+                  <th className="text-left py-2 md:py-3 px-2 md:px-4 text-[var(--color-gold)] opacity-80 text-xs md:text-sm">Status</th>
+                  <th className="text-left py-2 md:py-3 px-2 md:px-4 text-[var(--color-gold)] opacity-80 text-xs md:text-sm">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {cars.map((car) => (
                   <tr key={car.id} className="border-b border-[var(--color-border)] hover:bg-[var(--color-bg)]">
-                    <td className="py-3 px-4 text-[var(--color-gold)]">{car.title}</td>
-                    <td className="py-3 px-4 text-[var(--color-gold)]">{car.price}</td>
-                    <td className="py-3 px-4 text-[var(--color-gold)]">{car.year || 'N/A'}</td>
-                    <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                    <td className="py-2 md:py-3 px-2 md:px-4 text-[var(--color-gold)] text-xs md:text-sm">{car.title}</td>
+                    <td className="py-2 md:py-3 px-2 md:px-4 text-[var(--color-gold)] text-xs md:text-sm whitespace-nowrap">{car.price}</td>
+                    <td className="py-2 md:py-3 px-2 md:px-4 text-[var(--color-gold)] text-xs md:text-sm">{car.year || 'N/A'}</td>
+                    <td className="py-2 md:py-3 px-2 md:px-4">
+                      <span className={`px-1.5 md:px-2 py-0.5 md:py-1 rounded text-xs font-semibold whitespace-nowrap ${
                         car.price.toUpperCase() === 'SOLD'
                           ? 'bg-[var(--color-danger)] text-white'
                           : 'bg-[var(--color-gold)] text-black'
@@ -122,16 +122,16 @@ export default function AdminDashboard() {
                         {car.price.toUpperCase() === 'SOLD' ? 'Sold' : 'Available'}
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-2 md:py-3 px-2 md:px-4 whitespace-nowrap">
                       <Link
                         href={`/car/${car.id}`}
-                        className="text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] text-sm mr-4"
+                        className="text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] text-xs md:text-sm mr-2 md:mr-4"
                       >
                         View
                       </Link>
                       <Link
                         href={`/admin/edit-car/${car.id}`}
-                        className="text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] text-sm"
+                        className="text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] text-xs md:text-sm"
                       >
                         Edit
                       </Link>

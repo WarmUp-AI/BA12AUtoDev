@@ -52,30 +52,30 @@ export default function AdminLayout({
       <header className="bg-[var(--color-card-bg)] border-b border-[var(--color-border)] sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <Link href="/admin" className="flex items-center gap-3">
+            <Link href="/admin" className="flex items-center gap-2">
               <Image
                 src="/images/LogoPNG.png"
                 alt="BA12 Automotive"
                 width={120}
                 height={40}
-                className="h-10 w-auto"
+                className="h-8 md:h-10 w-auto"
               />
-              <span className="text-[var(--color-gold)] text-sm opacity-80">Admin</span>
+              <span className="text-[var(--color-gold)] text-xs md:text-sm opacity-80 hidden sm:inline">Admin</span>
             </Link>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 md:gap-6">
               <Link
                 href="/"
-                className="text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] text-sm"
+                className="text-[var(--color-gold)] hover:text-[var(--color-gold-hover)] text-xs md:text-sm whitespace-nowrap"
               >
                 View Site
               </Link>
-              <span className="text-[var(--color-gold)] opacity-60 text-sm">
+              <span className="text-[var(--color-gold)] opacity-60 text-xs md:text-sm hidden md:inline truncate max-w-[150px]">
                 {session.user.email}
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: '/admin/login' })}
-                className="text-[var(--color-danger)] hover:opacity-80 text-sm"
+                className="text-[var(--color-danger)] hover:opacity-80 text-xs md:text-sm whitespace-nowrap"
               >
                 Logout
               </button>
@@ -86,7 +86,7 @@ export default function AdminLayout({
 
       {/* Admin Content */}
       <div className="flex">
-        {/* Sidebar */}
+        {/* Sidebar - Desktop Only */}
         <aside className="w-64 bg-[var(--color-card-bg)] border-r border-[var(--color-border)] min-h-[calc(100vh-4rem)] hidden md:block">
           <nav className="p-4 space-y-2">
             {navLinks.map((link) => {
@@ -110,7 +110,7 @@ export default function AdminLayout({
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 md:p-8">
           {children}
         </main>
       </div>

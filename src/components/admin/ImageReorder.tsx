@@ -65,10 +65,12 @@ export function ImageReorder({ images, onReorder }: ImageReorderProps) {
   return (
     <div>
       <p className="text-sm text-[var(--color-gold)] opacity-80 mb-4">
-        Drag and drop to reorder images. The first image will be the main image.
+        <span className="hidden md:inline">Drag and drop to reorder images. </span>
+        <span className="md:hidden">Use the arrow buttons to reorder. </span>
+        The first image will be the main image.
       </p>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {images.map((imageUrl, index) => (
           <div
             key={`${imageUrl}-${index}`}
@@ -77,7 +79,7 @@ export function ImageReorder({ images, onReorder }: ImageReorderProps) {
             onDragOver={(e) => handleDragOver(e, index)}
             onDrop={(e) => handleDrop(e, index)}
             onDragEnd={handleDragEnd}
-            className={`relative group cursor-move rounded-lg overflow-hidden border-2 transition-all ${
+            className={`relative rounded-lg overflow-hidden border-2 transition-all ${
               draggedIndex === index
                 ? 'opacity-50 border-[var(--color-gold)] scale-95'
                 : dragOverIndex === index
@@ -85,74 +87,88 @@ export function ImageReorder({ images, onReorder }: ImageReorderProps) {
                 : 'border-[var(--color-border)] hover:border-[var(--color-gold)]'
             }`}
           >
-            {/* Image Preview */}
-            <div className="relative aspect-[4/3] bg-[var(--color-bg)]">
-              <Image
-                src={imageUrl}
-                alt={`Car image ${index + 1}`}
-                fill
-                className="object-cover"
-              />
-            </div>
+            {/* Image and Controls Container */}
+            <div className="flex items-center gap-3 p-3 bg-[var(--color-card-bg)]">
+              {/* Image Preview */}
+              <div className="relative w-24 h-24 flex-shrink-0 rounded overflow-hidden bg-[var(--color-bg)]">
+                <Image
+                  src={imageUrl}
+                  alt={`Car image ${index + 1}`}
+                  fill
+                  className="object-cover"
+                />
+                {/* Order Badge */}
+                <div className="absolute top-1 left-1 bg-black bg-opacity-75 text-white text-xs font-bold px-2 py-1 rounded">
+                  {index + 1}
+                  {index === 0 && <span className="ml-1">⭐</span>}
+                </div>
+              </div>
 
-            {/* Order Badge */}
-            <div className="absolute top-2 left-2 bg-black bg-opacity-75 text-white text-xs font-bold px-2 py-1 rounded">
-              {index + 1}
-              {index === 0 && <span className="ml-1">⭐</span>}
-            </div>
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <div className="text-[var(--color-gold)] text-sm font-semibold">
+                  {index === 0 ? 'Main image' : `Image ${index + 1}`}
+                </div>
+                <div className="text-xs text-[var(--color-gold)] opacity-60">
+                  {index === 0 ? 'Shown first in listings' : `Position ${index + 1}`}
+                </div>
+              </div>
 
-            {/* Controls Overlay */}
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-              {/* Move Up */}
-              {index > 0 && (
+              {/* Controls - Always visible */}
+              <div className="flex flex-col gap-2">
+                {/* Move Up */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     moveImage(index, 'up');
                   }}
-                  className="p-2 bg-[var(--color-gold)] text-black rounded-full hover:bg-[var(--color-gold-hover)] transition-colors"
+                  disabled={index === 0}
+                  className={`w-10 h-10 flex items-center justify-center rounded text-xl ${
+                    index === 0
+                      ? 'text-[var(--color-gold)] opacity-30 cursor-not-allowed'
+                      : 'text-[var(--color-gold)] hover:bg-[var(--color-bg)] active:bg-[var(--color-gold)] active:text-black'
+                  }`}
                   title="Move up"
                   type="button"
                 >
-                  ↑
+                  ▲
                 </button>
-              )}
 
-              {/* Move Down */}
-              {index < images.length - 1 && (
+                {/* Move Down */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     moveImage(index, 'down');
                   }}
-                  className="p-2 bg-[var(--color-gold)] text-black rounded-full hover:bg-[var(--color-gold-hover)] transition-colors"
+                  disabled={index === images.length - 1}
+                  className={`w-10 h-10 flex items-center justify-center rounded text-xl ${
+                    index === images.length - 1
+                      ? 'text-[var(--color-gold)] opacity-30 cursor-not-allowed'
+                      : 'text-[var(--color-gold)] hover:bg-[var(--color-bg)] active:bg-[var(--color-gold)] active:text-black'
+                  }`}
                   title="Move down"
                   type="button"
                 >
-                  ↓
+                  ▼
                 </button>
-              )}
+              </div>
 
-              {/* Remove */}
+              {/* Remove Button */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemove(index);
                 }}
-                className="p-2 bg-[var(--color-danger)] text-white rounded-full hover:opacity-80 transition-opacity"
+                className="w-10 h-10 flex items-center justify-center rounded text-[var(--color-danger)] hover:bg-red-900 hover:bg-opacity-20 text-2xl"
                 title="Remove image"
                 type="button"
               >
-                ✕
+                ×
               </button>
             </div>
           </div>
         ))}
       </div>
-
-      <p className="text-xs text-[var(--color-gold)] opacity-60 mt-4">
-        💡 Tip: You can also use the ↑ ↓ buttons to reorder images
-      </p>
     </div>
   );
 }

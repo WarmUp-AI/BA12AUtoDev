@@ -25,6 +25,11 @@ body {
   text-align: center;
 }
 
+/* Admin pages don't need body padding - they have their own header */
+body:has([data-admin-layout]) {
+  padding-top: 0;
+}
+
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;

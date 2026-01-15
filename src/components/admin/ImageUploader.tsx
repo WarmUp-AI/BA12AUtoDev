@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, DragEvent } from 'react';
+import { useState, useRef, DragEvent, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { compressImage, formatFileSize, isValidImageFile } from '@/lib/utils/imageCompression';
@@ -33,6 +33,70 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
   const uploadQueueRef = useRef<UploadItem[]>([]);
   const activeUploadsRef = useRef<number>(0);
 
+  // Cleanup all preview URLs on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      items.forEach((item) => {
+        if (item.preview) {
+          URL.revokeObjectURL(item.preview);
+        }
+      });
+    };
+  }, [items]);
+
+  // Create a small preview thumbnail to reduce memory usage
+  const createPreviewThumbnail = async (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.createElement('img');
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(URL.createObjectURL(file));
+            return;
+          }
+
+          // Create small thumbnail (max 100x100)
+          const maxSize = 100;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxSize) {
+              height = (height * maxSize) / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width = (width * maxSize) / height;
+              height = maxSize;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                resolve(URL.createObjectURL(blob));
+              } else {
+                resolve(URL.createObjectURL(file));
+              }
+            },
+            'image/jpeg',
+            0.7
+          );
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleFileSelect = async (files: FileList | null) => {
     if (!files) return;
 
@@ -43,16 +107,18 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
       return;
     }
 
-    // Create items for all files first
-    const newItems: UploadItem[] = filesArray.map((file) => ({
-      id: `${Date.now()}-${Math.random()}`,
-      file, // Will be replaced with compressed version
-      originalFile: file,
-      preview: URL.createObjectURL(file),
-      status: 'compressing' as const,
-      progress: 0,
-      originalSize: file.size,
-    }));
+    // Create items for all files first with preview thumbnails
+    const newItems: UploadItem[] = await Promise.all(
+      filesArray.map(async (file) => ({
+        id: `${Date.now()}-${Math.random()}`,
+        file, // Will be replaced with compressed version
+        originalFile: file,
+        preview: await createPreviewThumbnail(file),
+        status: 'compressing' as const,
+        progress: 0,
+        originalSize: file.size,
+      }))
+    );
 
     // Add all items to state at once
     setItems((prev) => [...prev, ...newItems]);
@@ -132,10 +198,16 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
       xhr.addEventListener('load', () => {
         if (xhr.status === 200) {
           const response = JSON.parse(xhr.responseText);
+
+          // Revoke the preview URL to free memory
+          if (item.preview) {
+            URL.revokeObjectURL(item.preview);
+          }
+
           setItems((prev) =>
             prev.map((i) =>
               i.id === item.id
-                ? { ...i, status: 'done', progress: 100, url: response.url }
+                ? { ...i, status: 'done', progress: 100, url: response.url, preview: '' }
                 : i
             )
           );
@@ -300,7 +372,7 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
               {/* Preview */}
               <div className="relative w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-[var(--color-bg)]">
                 <Image
-                  src={item.preview}
+                  src={item.url || item.preview}
                   alt="Preview"
                   fill
                   className="object-cover"

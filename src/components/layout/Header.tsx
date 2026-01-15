@@ -19,7 +19,7 @@ export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-[100] bg-[var(--color-bg)] border-b border-[var(--color-border)]">
       <nav className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-20 relative">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
@@ -33,7 +33,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex md:pointer-events-auto pointer-events-none items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -51,9 +51,10 @@ export function Header() {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              console.log('Burger clicked!'); // Debug log
               setMobileMenuOpen(!mobileMenuOpen);
             }}
-            className="md:hidden text-[var(--color-gold)] text-2xl focus:outline-none relative z-[60] p-2 -mr-2"
+            className="md:hidden md:relative absolute right-0 text-[var(--color-gold)] text-2xl focus:outline-none z-[110] p-3 touch-manipulation active:scale-95 bg-[var(--color-bg)]"
             aria-label="Toggle menu"
             type="button"
           >

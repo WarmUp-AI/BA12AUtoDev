@@ -199,6 +199,16 @@ label {
   transition: width 0.3s ease;
 }
 
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Responsive utilities */
 @media (max-width: 768px) {
   body {

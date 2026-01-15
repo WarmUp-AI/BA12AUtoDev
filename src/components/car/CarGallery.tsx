@@ -95,26 +95,52 @@ export function CarGallery({ images, title }: CarGalleryProps) {
 
       {/* Thumbnails */}
       {images.length > 1 && (
-        <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
-          {images.map((image, index) => (
-            <button
-              key={index}
-              onClick={() => handleThumbnailClick(index)}
-              className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                index === currentIndex
-                  ? 'border-[var(--color-gold)] scale-95'
-                  : 'border-transparent hover:border-[var(--color-gold)] opacity-60 hover:opacity-100'
-              }`}
-            >
-              <Image
-                src={image}
-                alt={`${title} - Thumbnail ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="150px"
-              />
-            </button>
-          ))}
+        <div className="relative">
+          {/* Mobile: Horizontal scroll */}
+          <div className="md:hidden flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
+            {images.map((image, index) => (
+              <button
+                key={index}
+                onClick={() => handleThumbnailClick(index)}
+                className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all snap-start ${
+                  index === currentIndex
+                    ? 'border-[var(--color-gold)] ring-2 ring-[var(--color-gold)] ring-opacity-50'
+                    : 'border-[var(--color-border)] opacity-60'
+                }`}
+              >
+                <Image
+                  src={image}
+                  alt={`${title} - Thumbnail ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="80px"
+                />
+              </button>
+            ))}
+          </div>
+
+          {/* Desktop: Grid */}
+          <div className="hidden md:grid grid-cols-6 gap-2">
+            {images.map((image, index) => (
+              <button
+                key={index}
+                onClick={() => handleThumbnailClick(index)}
+                className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                  index === currentIndex
+                    ? 'border-[var(--color-gold)] scale-95'
+                    : 'border-transparent hover:border-[var(--color-gold)] opacity-60 hover:opacity-100'
+                }`}
+              >
+                <Image
+                  src={image}
+                  alt={`${title} - Thumbnail ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="150px"
+                />
+              </button>
+            ))}
+          </div>
         </div>
       )}
 

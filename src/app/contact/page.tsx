@@ -103,16 +103,16 @@ function ContactFormContent() {
           </p>
 
           {success && (
-            <div className="card bg-[var(--color-gold)] bg-opacity-10 border-[var(--color-gold)] mb-6">
-              <p className="text-[var(--color-gold)] text-center font-semibold">
+            <div className="card bg-[var(--color-gold)] border-[var(--color-gold)] mb-6">
+              <p className="text-black text-center font-semibold">
                 Thank you! Your message has been sent successfully. We'll be in touch soon.
               </p>
             </div>
           )}
 
           {error && (
-            <div className="card bg-[var(--color-danger)] bg-opacity-10 border-[var(--color-danger)] mb-6">
-              <p className="text-[var(--color-danger)] text-center font-semibold">
+            <div className="card bg-[var(--color-danger)] border-[var(--color-danger)] mb-6">
+              <p className="text-white text-center font-semibold">
                 {error}
               </p>
             </div>

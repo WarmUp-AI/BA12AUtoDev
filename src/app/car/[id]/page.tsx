@@ -172,12 +172,12 @@ export default function CarDetailPage({ params }: { params: Promise<{ id: string
             )}
 
             {isSold && (
-              <div className="card bg-[var(--color-danger)] bg-opacity-10 border-[var(--color-danger)]">
-                <p className="text-[var(--color-danger)] font-bold text-center">
+              <div className="card bg-[var(--color-danger)] border-[var(--color-danger)]">
+                <p className="text-white font-bold text-center">
                   This vehicle has been sold
                 </p>
-                <p className="text-[var(--color-gold)] opacity-80 text-center mt-2">
-                  <Link href="/showroom" className="hover:text-[var(--color-gold-hover)] underline">
+                <p className="text-white opacity-90 text-center mt-2">
+                  <Link href="/showroom" className="hover:opacity-100 underline">
                     View our current stock
                   </Link>
                 </p>

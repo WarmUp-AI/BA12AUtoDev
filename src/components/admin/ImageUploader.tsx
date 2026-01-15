@@ -384,16 +384,16 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
 
       {/* Status Messages */}
       {isAllDone && (
-        <div className="mt-4 p-3 bg-[var(--color-gold)] bg-opacity-10 border border-[var(--color-gold)] rounded-lg text-center">
-          <p className="text-[var(--color-gold)]">
+        <div className="mt-4 p-3 bg-[var(--color-gold)] border border-[var(--color-gold)] rounded-lg text-center">
+          <p className="text-black font-semibold">
             All images uploaded successfully! ({uploadedUrls.length} total)
           </p>
         </div>
       )}
 
       {hasErrors && (
-        <div className="mt-4 p-3 bg-[var(--color-danger)] bg-opacity-10 border border-[var(--color-danger)] rounded-lg text-center">
-          <p className="text-[var(--color-danger)]">
+        <div className="mt-4 p-3 bg-[var(--color-danger)] border border-[var(--color-danger)] rounded-lg text-center">
+          <p className="text-white font-semibold">
             Some uploads failed. Click retry to try again.
           </p>
         </div>

@@ -58,8 +58,8 @@ export default function AdminLoginPage() {
         {/* Login Form */}
         <div className="card">
           {error && (
-            <div className="mb-4 p-3 bg-[var(--color-danger)] bg-opacity-10 border border-[var(--color-danger)] rounded-lg">
-              <p className="text-[var(--color-danger)] text-center">{error}</p>
+            <div className="mb-4 p-3 bg-[var(--color-danger)] border border-[var(--color-danger)] rounded-lg">
+              <p className="text-white text-center font-semibold">{error}</p>
             </div>
           )}
 

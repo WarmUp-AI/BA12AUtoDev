@@ -114,10 +114,10 @@ export default function AdminDashboard() {
                     <td className="py-3 px-4 text-[var(--color-gold)]">{car.price}</td>
                     <td className="py-3 px-4 text-[var(--color-gold)]">{car.year || 'N/A'}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded text-xs ${
+                      <span className={`px-2 py-1 rounded text-xs font-semibold ${
                         car.price.toUpperCase() === 'SOLD'
-                          ? 'bg-[var(--color-danger)] bg-opacity-20 text-[var(--color-danger)]'
-                          : 'bg-[var(--color-gold)] bg-opacity-20 text-[var(--color-gold)]'
+                          ? 'bg-[var(--color-danger)] text-white'
+                          : 'bg-[var(--color-gold)] text-black'
                       }`}>
                         {car.price.toUpperCase() === 'SOLD' ? 'Sold' : 'Available'}
                       </span>

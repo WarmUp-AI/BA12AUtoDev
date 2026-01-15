@@ -27,34 +27,25 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
     };
   }, [isOpen, onClose]);
 
+  if (!isOpen) return null;
+
   return (
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black z-[90] md:hidden transition-opacity duration-300 ${
-          isOpen ? 'opacity-80' : 'opacity-0 pointer-events-none'
-        }`}
+        className="fixed inset-0 bg-black bg-opacity-80 z-[90] md:hidden"
         onClick={onClose}
       />
 
       {/* Menu */}
-      <div
-        className={`fixed top-20 left-0 right-0 bg-[var(--color-card-bg)] border-b border-[var(--color-border)] z-[95] md:hidden transform transition-all duration-300 ease-in-out ${
-          isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-        }`}
-      >
+      <div className="fixed top-20 left-0 right-0 bg-[var(--color-card-bg)] border-b border-[var(--color-border)] z-[95] md:hidden">
         <div className="flex flex-col py-2">
-          {links.map((link, index) => (
+          {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={onClose}
-              className={`px-6 py-4 text-lg text-[var(--color-gold)] hover:bg-[var(--color-bg)] hover:text-[var(--color-gold-hover)] transition-all duration-200 transform ${
-                isOpen ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
-              }`}
-              style={{
-                transitionDelay: isOpen ? `${index * 50}ms` : '0ms',
-              }}
+              className="px-6 py-4 text-lg text-[var(--color-gold)] hover:bg-[var(--color-bg)] hover:text-[var(--color-gold-hover)] transition-colors"
             >
               {link.label}
             </Link>

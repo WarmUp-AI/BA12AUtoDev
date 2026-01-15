@@ -379,8 +379,8 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
         </div>
       )}
 
-      {/* Uploaded Images - Only show completed uploads */}
-      {uploadedUrls.length > 0 && isAllDone && (
+      {/* Uploaded Images - Show when we have uploaded URLs */}
+      {uploadedUrls.length > 0 && (
         <div className="mt-6">
           <h3 className="text-[var(--color-gold)] font-semibold mb-3">
             Uploaded Images ({uploadedUrls.length})
@@ -412,28 +412,30 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
                 </div>
 
                 {/* Reorder Buttons */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-2">
                   <button
                     onClick={() => handleMoveUp(index)}
                     disabled={index === 0}
-                    className={`p-1 rounded ${
+                    className={`w-10 h-10 flex items-center justify-center rounded text-xl ${
                       index === 0
                         ? 'text-[var(--color-gold)] opacity-30 cursor-not-allowed'
-                        : 'text-[var(--color-gold)] hover:bg-[var(--color-bg)]'
+                        : 'text-[var(--color-gold)] hover:bg-[var(--color-bg)] active:bg-[var(--color-gold)] active:text-black'
                     }`}
                     aria-label="Move up"
+                    type="button"
                   >
                     ▲
                   </button>
                   <button
                     onClick={() => handleMoveDown(index)}
                     disabled={index === uploadedUrls.length - 1}
-                    className={`p-1 rounded ${
+                    className={`w-10 h-10 flex items-center justify-center rounded text-xl ${
                       index === uploadedUrls.length - 1
                         ? 'text-[var(--color-gold)] opacity-30 cursor-not-allowed'
-                        : 'text-[var(--color-gold)] hover:bg-[var(--color-bg)]'
+                        : 'text-[var(--color-gold)] hover:bg-[var(--color-bg)] active:bg-[var(--color-gold)] active:text-black'
                     }`}
                     aria-label="Move down"
+                    type="button"
                   >
                     ▼
                   </button>
@@ -446,8 +448,9 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
                     setUploadedUrls(newUrls);
                     onImagesChange(newUrls);
                   }}
-                  className="text-[var(--color-danger)] hover:opacity-80 text-xl p-1"
+                  className="w-10 h-10 flex items-center justify-center rounded text-[var(--color-danger)] hover:bg-red-900 hover:bg-opacity-20 text-2xl"
                   aria-label="Remove image"
+                  type="button"
                 >
                   ×
                 </button>

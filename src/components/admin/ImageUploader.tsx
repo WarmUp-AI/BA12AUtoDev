@@ -3,15 +3,19 @@
 import { useState, useRef, DragEvent } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
+import { compressImage, formatFileSize, isValidImageFile } from '@/lib/utils/imageCompression';
 
 interface UploadItem {
   id: string;
   file: File;
+  originalFile: File;
   preview: string;
-  status: 'queued' | 'uploading' | 'done' | 'error';
+  status: 'queued' | 'compressing' | 'uploading' | 'done' | 'error';
   progress: number;
   url?: string;
   error?: string;
+  originalSize?: number;
+  compressedSize?: number;
 }
 
 interface ImageUploaderProps {
@@ -29,28 +33,62 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
   const uploadQueueRef = useRef<UploadItem[]>([]);
   const activeUploadsRef = useRef<number>(0);
 
-  const handleFileSelect = (files: FileList | null) => {
+  const handleFileSelect = async (files: FileList | null) => {
     if (!files) return;
 
     const newItems: UploadItem[] = [];
 
-    Array.from(files).forEach((file) => {
-      if (!file.type.startsWith('image/')) return;
+    for (const file of Array.from(files)) {
+      if (!isValidImageFile(file)) {
+        console.warn('Skipping invalid file:', file.name);
+        continue;
+      }
 
       const item: UploadItem = {
         id: `${Date.now()}-${Math.random()}`,
-        file,
+        file, // Will be replaced with compressed version
+        originalFile: file,
         preview: URL.createObjectURL(file),
-        status: 'queued',
+        status: 'compressing',
         progress: 0,
+        originalSize: file.size,
       };
 
       newItems.push(item);
-    });
+      setItems((prev) => [...prev, item]);
 
-    setItems((prev) => [...prev, ...newItems]);
-    uploadQueueRef.current = [...uploadQueueRef.current, ...newItems];
-    processQueue();
+      // Compress image
+      try {
+        const compressedFile = await compressImage(file);
+
+        // Update item with compressed file
+        setItems((prev) =>
+          prev.map((i) =>
+            i.id === item.id
+              ? {
+                  ...i,
+                  file: compressedFile,
+                  status: 'queued',
+                  compressedSize: compressedFile.size,
+                }
+              : i
+          )
+        );
+
+        // Add to upload queue
+        uploadQueueRef.current.push({ ...item, file: compressedFile, status: 'queued', compressedSize: compressedFile.size });
+        processQueue();
+      } catch (error) {
+        console.error('Compression failed:', error);
+        setItems((prev) =>
+          prev.map((i) =>
+            i.id === item.id
+              ? { ...i, status: 'error', error: 'Compression failed' }
+              : i
+          )
+        );
+      }
+    }
   };
 
   const processQueue = () => {
@@ -226,6 +264,9 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
           <p className="text-lg mb-1">Drag & drop images here</p>
           <p className="text-sm opacity-60">or click to browse</p>
           <p className="text-xs opacity-60 mt-2">
+            Images will be auto-compressed before upload
+          </p>
+          <p className="text-xs opacity-60">
             Max {MAX_CONCURRENT} concurrent uploads
           </p>
         </div>
@@ -271,7 +312,16 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
                   {item.file.name}
                 </div>
                 <div className="text-xs text-[var(--color-gold)] opacity-60 mb-2">
-                  {(item.file.size / 1024).toFixed(0)} KB
+                  {item.originalSize && item.compressedSize ? (
+                    <>
+                      {formatFileSize(item.originalSize)} → {formatFileSize(item.compressedSize)}
+                      <span className="text-[var(--color-gold)] ml-1">
+                        ({Math.round(((item.originalSize - item.compressedSize) / item.originalSize) * 100)}% smaller)
+                      </span>
+                    </>
+                  ) : (
+                    formatFileSize(item.file.size)
+                  )}
                 </div>
 
                 {/* Progress Bar */}
@@ -294,6 +344,11 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
 
               {/* Status */}
               <div className="flex items-center gap-2">
+                {item.status === 'compressing' && (
+                  <span className="text-[var(--color-gold)] opacity-60 text-sm">
+                    Compressing...
+                  </span>
+                )}
                 {item.status === 'queued' && (
                   <span className="text-[var(--color-gold)] opacity-60 text-sm">
                     Queued...

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -10,7 +10,7 @@ import { Select } from '@/components/ui/Select';
 import { Button } from '@/components/ui/Button';
 import { Car } from '@/types/car';
 
-export default function ContactPage() {
+function ContactFormContent() {
   const searchParams = useSearchParams();
   const carIdFromUrl = searchParams.get('car');
 
@@ -187,7 +187,24 @@ export default function ContactPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Header />
+        <main className="container mx-auto px-4 py-12">
+          <div className="flex justify-center py-20">
+            <div className="spinner"></div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    }>
+      <ContactFormContent />
+    </Suspense>
   );
 }

@@ -1,6 +1,18 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialization to avoid build-time errors
+let resend: Resend | null = null;
+
+function getResendClient() {
+  if (!resend) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error('RESEND_API_KEY is not configured');
+    }
+    resend = new Resend(apiKey);
+  }
+  return resend;
+}
 
 export async function sendContactEmail(
   name: string,
@@ -11,6 +23,9 @@ export async function sendContactEmail(
 ) {
   const emailFrom = process.env.EMAIL_FROM || 'sales@ba12automotive.co.uk';
   const emailTo = process.env.EMAIL_TO || 'sales@ba12automotive.co.uk';
+
+  // Get the Resend client (lazy initialization)
+  const client = getResendClient();
 
   const htmlContent = `
     <h2>New Contact Form Submission</h2>
@@ -23,7 +38,7 @@ export async function sendContactEmail(
   `;
 
   try {
-    await resend.emails.send({
+    await client.emails.send({
       from: emailFrom,
       to: emailTo,
       subject: carTitle ? `Enquiry about ${carTitle}` : 'New Contact Form Submission',

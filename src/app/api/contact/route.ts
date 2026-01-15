@@ -21,8 +21,13 @@ export async function POST(request: NextRequest) {
     // Save to database
     await saveContactSubmission(name, email, phone, carId, carTitle, message, ipAddress);
 
-    // Send email
-    await sendContactEmail(name, email, phone, carTitle, message);
+    // Send email (optional - only if configured)
+    try {
+      await sendContactEmail(name, email, phone, carTitle, message);
+    } catch (emailError) {
+      console.error('Email send failed (continuing anyway):', emailError);
+      // Continue even if email fails - contact is saved in database
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

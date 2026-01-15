@@ -47,10 +47,10 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)]" data-admin-layout>
+    <div className="min-h-screen bg-[var(--color-bg)] overflow-x-hidden" data-admin-layout>
       {/* Admin Header */}
       <header className="bg-[var(--color-card-bg)] border-b border-[var(--color-border)] sticky top-0 z-50">
-        <div className="container mx-auto px-4">
+        <div className="max-w-full px-4">
           <div className="flex items-center justify-between h-16">
             <Link href="/admin" className="flex items-center gap-2">
               <Image
@@ -85,9 +85,9 @@ export default function AdminLayout({
       </header>
 
       {/* Admin Content */}
-      <div className="flex">
+      <div className="flex max-w-full">
         {/* Sidebar - Desktop Only */}
-        <aside className="w-64 bg-[var(--color-card-bg)] border-r border-[var(--color-border)] min-h-[calc(100vh-4rem)] hidden md:block">
+        <aside className="w-64 bg-[var(--color-card-bg)] border-r border-[var(--color-border)] min-h-[calc(100vh-4rem)] hidden md:block flex-shrink-0">
           <nav className="p-4 space-y-2">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -110,7 +110,7 @@ export default function AdminLayout({
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 p-4 md:p-8 min-w-0">
           {children}
         </main>
       </div>

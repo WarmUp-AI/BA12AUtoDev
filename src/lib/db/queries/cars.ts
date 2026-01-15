@@ -111,7 +111,11 @@ export async function getCarBySlug(slug: string): Promise<Car | null> {
 
 export async function getFeaturedCars(limit: number = 3): Promise<Car[]> {
   const result = await sql.query(
-    'SELECT * FROM cars WHERE deleted_at IS NULL ORDER BY RANDOM() LIMIT $1',
+    `SELECT * FROM cars
+     WHERE deleted_at IS NULL
+     AND UPPER(price) != 'SOLD'
+     ORDER BY RANDOM()
+     LIMIT $1`,
     [limit]
   );
   return result.rows as Car[];

@@ -4,6 +4,7 @@ import { use, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CarForm } from '@/components/admin/CarForm';
 import { ImageUploader } from '@/components/admin/ImageUploader';
+import { ImageReorder } from '@/components/admin/ImageReorder';
 import { Button } from '@/components/ui/Button';
 import { Car } from '@/types/car';
 
@@ -182,7 +183,20 @@ export default function EditCarPage({ params }: { params: Promise<{ id: string }
 
         <div className="card mb-6">
           <h2 className="text-xl font-bold mb-4 text-[var(--color-gold)]">Images</h2>
-          <ImageUploader onImagesChange={setImages} existingImages={images} />
+
+          {/* Existing Images - Reorder */}
+          {images.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3 text-[var(--color-gold)]">Current Images</h3>
+              <ImageReorder images={images} onReorder={setImages} />
+            </div>
+          )}
+
+          {/* Upload New Images */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3 text-[var(--color-gold)]">Add More Images</h3>
+            <ImageUploader onImagesChange={(newImages) => setImages([...images, ...newImages])} existingImages={[]} />
+          </div>
         </div>
 
         <div className="flex gap-4">

@@ -23,7 +23,7 @@ interface ImageUploaderProps {
   existingImages?: string[];
 }
 
-const MAX_CONCURRENT = 3;
+const MAX_CONCURRENT = 5; // Increased for better bulk upload performance
 
 export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUploaderProps) {
   const [items, setItems] = useState<UploadItem[]>([]);
@@ -36,30 +36,31 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
   const handleFileSelect = async (files: FileList | null) => {
     if (!files) return;
 
-    const newItems: UploadItem[] = [];
+    const filesArray = Array.from(files).filter(isValidImageFile);
 
-    for (const file of Array.from(files)) {
-      if (!isValidImageFile(file)) {
-        console.warn('Skipping invalid file:', file.name);
-        continue;
-      }
+    if (filesArray.length === 0) {
+      console.warn('No valid image files selected');
+      return;
+    }
 
-      const item: UploadItem = {
-        id: `${Date.now()}-${Math.random()}`,
-        file, // Will be replaced with compressed version
-        originalFile: file,
-        preview: URL.createObjectURL(file),
-        status: 'compressing',
-        progress: 0,
-        originalSize: file.size,
-      };
+    // Create items for all files first
+    const newItems: UploadItem[] = filesArray.map((file) => ({
+      id: `${Date.now()}-${Math.random()}`,
+      file, // Will be replaced with compressed version
+      originalFile: file,
+      preview: URL.createObjectURL(file),
+      status: 'compressing' as const,
+      progress: 0,
+      originalSize: file.size,
+    }));
 
-      newItems.push(item);
-      setItems((prev) => [...prev, item]);
+    // Add all items to state at once
+    setItems((prev) => [...prev, ...newItems]);
 
-      // Compress image
+    // Compress images sequentially to avoid overwhelming the browser
+    for (const item of newItems) {
       try {
-        const compressedFile = await compressImage(file);
+        const compressedFile = await compressImage(item.originalFile);
 
         // Update item with compressed file
         setItems((prev) =>
@@ -79,7 +80,7 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
         uploadQueueRef.current.push({ ...item, file: compressedFile, status: 'queued', compressedSize: compressedFile.size });
         processQueue();
       } catch (error) {
-        console.error('Compression failed:', error);
+        console.error('Compression failed for:', item.originalFile.name, error);
         setItems((prev) =>
           prev.map((i) =>
             i.id === item.id

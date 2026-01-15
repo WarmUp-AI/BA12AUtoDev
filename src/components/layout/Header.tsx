@@ -21,7 +21,7 @@ export function Header() {
       <nav className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20 relative">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center relative z-10">
             <Image
               src="/images/LogoPNG.png"
               alt="BA12 Automotive"

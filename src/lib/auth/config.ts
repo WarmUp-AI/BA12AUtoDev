@@ -73,6 +73,19 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name as string;
       }
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      // Prevent redirect loops by ensuring we redirect to the right place
+      // If the URL is a relative path, prepend baseUrl
+      if (url.startsWith('/')) {
+        return `${baseUrl}${url}`;
+      }
+      // If the URL is on the same domain, allow it
+      if (new URL(url).origin === baseUrl) {
+        return url;
+      }
+      // Otherwise, redirect to the base URL (home page or admin dashboard)
+      return `${baseUrl}/admin`;
     }
   },
   session: {

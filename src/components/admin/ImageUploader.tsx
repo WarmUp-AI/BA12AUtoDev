@@ -300,6 +300,24 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
     processQueue();
   };
 
+  const handleMoveUp = (index: number) => {
+    if (index === 0) return;
+
+    const newUrls = [...uploadedUrls];
+    [newUrls[index - 1], newUrls[index]] = [newUrls[index], newUrls[index - 1]];
+    setUploadedUrls(newUrls);
+    onImagesChange(newUrls);
+  };
+
+  const handleMoveDown = (index: number) => {
+    if (index === uploadedUrls.length - 1) return;
+
+    const newUrls = [...uploadedUrls];
+    [newUrls[index], newUrls[index + 1]] = [newUrls[index + 1], newUrls[index]];
+    setUploadedUrls(newUrls);
+    onImagesChange(newUrls);
+  };
+
   const isAllDone = items.length > 0 && items.every((i) => i.status === 'done');
   const hasErrors = items.some((i) => i.status === 'error');
   const totalProgress = items.length > 0
@@ -361,8 +379,86 @@ export function ImageUploader({ onImagesChange, existingImages = [] }: ImageUplo
         </div>
       )}
 
-      {/* Upload Items */}
-      {items.length > 0 && (
+      {/* Uploaded Images - Only show completed uploads */}
+      {uploadedUrls.length > 0 && isAllDone && (
+        <div className="mt-6">
+          <h3 className="text-[var(--color-gold)] font-semibold mb-3">
+            Uploaded Images ({uploadedUrls.length})
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {uploadedUrls.map((url, index) => (
+              <div
+                key={url}
+                className="flex items-center gap-3 p-3 bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-lg"
+              >
+                {/* Preview */}
+                <div className="relative w-16 h-16 flex-shrink-0 rounded overflow-hidden bg-[var(--color-bg)]">
+                  <Image
+                    src={url}
+                    alt={`Image ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="text-[var(--color-gold)] text-sm">
+                    Image {index + 1}
+                  </div>
+                  <div className="text-xs text-[var(--color-gold)] opacity-60">
+                    {index === 0 ? 'Main image' : `Position ${index + 1}`}
+                  </div>
+                </div>
+
+                {/* Reorder Buttons */}
+                <div className="flex flex-col gap-1">
+                  <button
+                    onClick={() => handleMoveUp(index)}
+                    disabled={index === 0}
+                    className={`p-1 rounded ${
+                      index === 0
+                        ? 'text-[var(--color-gold)] opacity-30 cursor-not-allowed'
+                        : 'text-[var(--color-gold)] hover:bg-[var(--color-bg)]'
+                    }`}
+                    aria-label="Move up"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    onClick={() => handleMoveDown(index)}
+                    disabled={index === uploadedUrls.length - 1}
+                    className={`p-1 rounded ${
+                      index === uploadedUrls.length - 1
+                        ? 'text-[var(--color-gold)] opacity-30 cursor-not-allowed'
+                        : 'text-[var(--color-gold)] hover:bg-[var(--color-bg)]'
+                    }`}
+                    aria-label="Move down"
+                  >
+                    ▼
+                  </button>
+                </div>
+
+                {/* Remove Button */}
+                <button
+                  onClick={() => {
+                    const newUrls = uploadedUrls.filter((u) => u !== url);
+                    setUploadedUrls(newUrls);
+                    onImagesChange(newUrls);
+                  }}
+                  className="text-[var(--color-danger)] hover:opacity-80 text-xl p-1"
+                  aria-label="Remove image"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Upload Progress - Only show during upload */}
+      {items.length > 0 && !isAllDone && (
         <div className="mt-6 space-y-3">
           {items.map((item) => (
             <div

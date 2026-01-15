@@ -123,30 +123,49 @@ export async function getFeaturedCars(limit: number = 3): Promise<Car[]> {
 
 export async function createCar(data: CarFormData): Promise<Car> {
   const title = `${data.make} ${data.model}`;
-  const slug = createSlug(title);
+  let slug = createSlug(title);
 
-  const result = await sql.query(
-    `INSERT INTO cars (make, model, title, price, year, mileage, fuel_type, transmission, description, video_url, images, featured, slug)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-     RETURNING *`,
-    [
-      data.make,
-      data.model,
-      title,
-      data.price,
-      data.year || null,
-      data.mileage || null,
-      data.fuel_type || null,
-      data.transmission || null,
-      data.description,
-      data.video_url || null,
-      JSON.stringify(data.images),
-      data.featured || false,
-      slug
-    ]
-  );
+  // Check if slug exists and add random suffix if needed
+  let attempts = 0;
+  while (attempts < 10) {
+    try {
+      const result = await sql.query(
+        `INSERT INTO cars (make, model, title, price, year, mileage, fuel_type, transmission, description, video_url, images, featured, slug)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+         RETURNING *`,
+        [
+          data.make,
+          data.model,
+          title,
+          data.price,
+          data.year || null,
+          data.mileage || null,
+          data.fuel_type || null,
+          data.transmission || null,
+          data.description,
+          data.video_url || null,
+          JSON.stringify(data.images),
+          data.featured || false,
+          slug
+        ]
+      );
 
-  return result.rows[0] as Car;
+      return result.rows[0] as Car;
+    } catch (error: any) {
+      // Check if it's a duplicate slug error
+      if (error.code === '23505' && error.constraint === 'cars_slug_key') {
+        // Add random suffix and retry
+        const randomSuffix = Math.random().toString(36).substring(2, 8);
+        slug = `${createSlug(title)}-${randomSuffix}`;
+        attempts++;
+        continue;
+      }
+      // If it's a different error, throw it
+      throw error;
+    }
+  }
+
+  throw new Error('Failed to create unique slug after 10 attempts');
 }
 
 export async function updateCar(id: string, data: Partial<CarFormData>): Promise<Car | null> {

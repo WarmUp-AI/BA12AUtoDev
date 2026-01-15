@@ -59,13 +59,16 @@ export default function AddCarPage() {
       });
 
       if (!res.ok) {
-        throw new Error('Failed to create car');
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to create car');
       }
 
       const data = await res.json();
       router.push(`/car/${data.car.id}`);
     } catch (err) {
-      setError('Failed to create car. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create car. Please try again.';
+      setError(errorMessage);
+      console.error('Error creating car:', err);
     } finally {
       setLoading(false);
     }
@@ -78,8 +81,8 @@ export default function AddCarPage() {
       <h1 className="text-3xl font-bold mb-8 text-[var(--color-gold)]">Add New Car</h1>
 
       {error && (
-        <div className="mb-6 p-4 bg-[var(--color-danger)] bg-opacity-10 border border-[var(--color-danger)] rounded-lg">
-          <p className="text-[var(--color-danger)]">{error}</p>
+        <div className="mb-6 p-4 bg-red-900 bg-opacity-20 border-2 border-red-500 rounded-lg">
+          <p className="text-white font-semibold">{error}</p>
         </div>
       )}
 

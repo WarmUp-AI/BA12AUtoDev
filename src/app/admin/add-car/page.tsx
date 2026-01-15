@@ -60,7 +60,10 @@ export default function AddCarPage() {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to create car');
+        const errorMsg = errorData.details
+          ? `${errorData.error}: ${errorData.details}`
+          : errorData.error || 'Failed to create car';
+        throw new Error(errorMsg);
       }
 
       const data = await res.json();

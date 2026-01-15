@@ -35,24 +35,42 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
+      console.error('POST /api/cars: No session found');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const data = await request.json();
+    console.log('POST /api/cars: Received data:', {
+      make: data.make,
+      model: data.model,
+      price: data.price,
+      imageCount: data.images?.length
+    });
 
     // Validate required fields
     if (!data.make || !data.model || !data.price || !data.description) {
+      console.error('POST /api/cars: Missing required fields', {
+        hasMake: !!data.make,
+        hasModel: !!data.model,
+        hasPrice: !!data.price,
+        hasDescription: !!data.description
+      });
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required fields: make, model, price, and description are required' },
         { status: 400 }
       );
     }
 
     const car = await createCar(data);
+    console.log('POST /api/cars: Car created successfully:', car.id);
 
     return NextResponse.json({ car }, { status: 201 });
   } catch (error) {
     console.error('Error creating car:', error);
-    return NextResponse.json({ error: 'Failed to create car' }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({
+      error: 'Failed to create car',
+      details: errorMessage
+    }, { status: 500 });
   }
 }

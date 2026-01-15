@@ -14,7 +14,7 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    '/admin/:path*',
+    '/admin/((?!login).*)', // Protect all /admin/* except /admin/login
     '/api/cars/:path((?!featured).*)', // Protect all /api/cars/* except /api/cars/featured
     '/api/upload/:path*',
     '/api/analytics/stats/:path*'

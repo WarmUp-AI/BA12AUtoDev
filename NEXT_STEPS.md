@@ -40,7 +40,7 @@ After the schema is created, you need to create your first admin user.
 
 ```bash
 cd /Users/rory/BA12/modernized
-node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('YourPasswordHere', 10));"
+node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('Myth1cal', 10));"
 ```
 
 Replace `YourPasswordHere` with your desired password. Copy the output hash.
@@ -53,7 +53,7 @@ In Neon SQL Editor or psql:
 INSERT INTO admin_users (email, password_hash, name)
 VALUES (
   'admin@ba12automotive.co.uk',
-  '$2a$10$YOUR_HASH_HERE',
+  '$2b$10$CxJCplSSPlra4Q0rQQiyWe5dhOnTzAq.U9Y5.Sw3mKda4YYhzagnS',
   'Admin'
 );
 ```

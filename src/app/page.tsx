@@ -15,7 +15,7 @@ export default function HomePage() {
             Welcome to BA12 Automotive
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-[var(--color-gold)] opacity-80 px-2">
-            Quality used cars, honest service
+            A relaxed approach to buying your next vehicle
           </p>
           <Link href="/showroom">
             <Button variant="primary" className="text-lg px-8 py-3">

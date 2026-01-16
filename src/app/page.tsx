@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FeaturedCars } from '@/components/car/FeaturedCars';
@@ -11,9 +12,16 @@ export default function HomePage() {
       <main className="container mx-auto px-4 py-12">
         {/* Hero Section */}
         <section className="text-center mb-16 px-2">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-[var(--color-gold)] leading-tight py-4">
-            Welcome to BA12 Automotive
-          </h1>
+          <div className="flex justify-center mb-6 py-4">
+            <Image
+              src="/images/LogoPNG.png"
+              alt="BA12 Automotive"
+              width={300}
+              height={100}
+              className="h-24 md:h-32 w-auto"
+              priority
+            />
+          </div>
           <p className="text-xl md:text-2xl mb-8 text-[var(--color-gold)] opacity-80 px-2">
             A relaxed approach to buying your next vehicle
           </p>

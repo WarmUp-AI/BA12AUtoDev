@@ -11,7 +11,7 @@ export function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4 text-[var(--color-gold)]">BA12 Automotive</h3>
             <p className="text-[var(--color-gold)] opacity-80">
-              Quality used cars in excellent condition. Your trusted partner for finding the perfect vehicle.
+              A relaxed approach to buying your next vehicle.
             </p>
           </div>
 
